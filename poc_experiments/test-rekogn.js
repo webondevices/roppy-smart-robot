@@ -17,3 +17,4 @@ function init () {
 init();
 
 // rek.faceSearch('mate-test.jpg');
+// rek.detectLabels('IMG_0342.jpg');
