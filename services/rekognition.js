@@ -6,6 +6,24 @@ const config = require('./../config').rekognition;
 
 const rekognition = new AWS.Rekognition({region: config.region});
 
+function getFaceDetails(imagePath) {
+	const bitmap = fs.readFileSync(imagePath);
+
+	return new Promise((resolve, reject) => {
+		rekognition.detectFaces({
+			"Image": { 
+				"Bytes": bitmap
+			},
+			"Attributes": ["ALL"]
+		})
+		.promise()
+		.then(result => {
+			resolve([result, imagePath])
+		})
+		.catch(reject);
+	});
+}
+
 function faceSearch(imagePath) {
 	const bitmap = fs.readFileSync(imagePath);
 
@@ -14,12 +32,14 @@ function faceSearch(imagePath) {
 			"CollectionId": config.collectionName,
 			"FaceMatchThreshold": config.FaceMatchThreshold,
 			"Image": { 
-				"Bytes": bitmap,
+				"Bytes": bitmap
 			},
 			"MaxFaces": config.MaxFaces
 		})
 		.promise()
-		.then(resolve)
+		.then(result => {
+			resolve([result, imagePath])
+		})
 		.catch(reject);
 	});
 }
@@ -36,10 +56,13 @@ function detectLabels(imagePath) {
 			"MinConfidence": config.MinConfidence
 		})
 		.promise()
-		.then(resolve)
+		.then(result => {
+			resolve([result, imagePath])
+		})
 		.catch(reject);
 	});
 }
 
 module.exports.detectLabels = detectLabels;
 module.exports.faceSearch = faceSearch;
+module.exports.getFaceDetails = getFaceDetails;

@@ -1,7 +1,9 @@
+'use strict';
+
 // Load the SDK
 const AWS = require('aws-sdk');
 const Fs = require('fs');
-const player = require('play-sound')(opts = {});
+const player = require('play-sound')({});
 
 // Create an Polly client
 const Polly = new AWS.Polly({
